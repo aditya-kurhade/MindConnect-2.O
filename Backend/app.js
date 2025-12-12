@@ -3,9 +3,24 @@ dotenv.config();
 const express = require('express');
 const {checkConnection} = require('./config/dbConfig');
 const {createTable} = require('./utils/dbUtils');
+const cors = require('cors');
+
+const authClientRoute = require('./routes/authClientRoute');
+const authCounsellorRoute = require('./routes/authCounsellorRoute');
+
 
 const app = express();
-const port = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use(cors());
+
+app.use('/api', authClientRoute);
+app.use('/api', authCounsellorRoute);
+
+
+
+
+const port = process.env.PORT || 5000;
     
 app.get('/', (req, res) => {
   res.send('Hello World!');
