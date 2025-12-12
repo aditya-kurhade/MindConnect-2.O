@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@supabase/supabase-js": "^2.87.1",
     "@tailwindcss/vite": "^4.1.13",
     "appwrite": "^19.0.0",
+    "axios": "^1.13.2",
+    "axois": "^0.0.1-security",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.542.0",
     "react": "^19.1.1",
