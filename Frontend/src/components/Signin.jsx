@@ -6,6 +6,7 @@ import {
   FaLock,
 } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Signin = () => {
   const [accountType, setAccountType] = useState("Client");
@@ -18,32 +19,7 @@ const Signin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Local login function (replaces previous `useAuth` hook usage).
-  // Adjust the endpoint `/api/login` if your backend uses a different route.
-  const loginUser = async (email, password, role) => {
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, role }),
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => null);
-      throw new Error((errorData && errorData.message) || res.statusText || "Login failed");
-    }
-
-    const data = await res.json();
-    // Save token if backend returns one
-    if (data && data.token) {
-      try {
-        localStorage.setItem("token", data.token);
-      } catch {
-        // ignore localStorage errors
-      }
-    }
-
-    return data;
-  };
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,26 +37,27 @@ const Signin = () => {
       setError("All fields are required");
       return;
     }
-
+    setIsLoading(true);
     try {
-      setIsLoading(true);
+      const endpoint = accountType === "Client" ? "/api/client-login" : "/api/counsellor-login";
+      const response = await axios.post(`http://localhost:5000${endpoint}`, formData);
 
-      await loginUser(formData.email, formData.password, accountType);
-
-      if (accountType === "Client") {
-        navigate("/client-dashboard");
-      } else {
-        navigate("/counsellor-dashboard");
+      if (response.status === 200) {
+        console.log("Login successful:", response.data);
+        // Redirect based on account type
+        if (accountType === "Client") {
+          navigate("/client-dashboard");
+        } else {
+          navigate("/counsellor-dashboard");
+        }
       }
-
-      // Redirect to home page after successful login
     } catch (error) {
-      setError(error.message || "Login failed. Please check your credentials.");
+      setError("An error occurred. Please try again : " + error.message);
     } finally {
       setIsLoading(false);
+      
     }
-  };
-
+  };  
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-green-50">
       {/* Header */}
