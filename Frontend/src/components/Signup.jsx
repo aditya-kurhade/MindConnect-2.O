@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FaLongArrowAltLeft, FaRegHeart } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Signup = () => {
+  const navigator = useNavigate();
   const [accountType, setAccountType] = useState("Client");
   const [formData, setFormData] = useState({
     firstName: "",
@@ -19,57 +22,10 @@ const Signup = () => {
   });
 
   const [passwordError, setPasswordError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-
-  // Local registration function (replaces previous `useAuth` hook usage).
-  // Update the endpoint `/api/register` if your backend uses a different route.
-  const registerUser = async (userData) => {
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData),
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => null);
-      throw new Error((errorData && errorData.message) || res.statusText || "Registration failed");
-    }
-
-    return res.json();
-  };
-
-  useEffect(() => {
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      licenseNumber: "",
-      specialization: "",
-      experience: "",
-      location: "",
-      bio: "",
-      ageRange: "",
-    });
-    setPasswordError("");
-  }, [accountType]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    // Reset error if password fields are changed
-    if (name === "password" || name === "confirmPassword") {
-      if (formData.password === value || formData.confirmPassword === value) {
-        setPasswordError("");
-      }
-    }
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -79,47 +35,33 @@ const Signup = () => {
       return;
     }
 
-    setPasswordError("");
+    try{
+    const userData = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      password: formData.password,
+      confirmPassword: formData.confirmPassword,
+      licenseNumber: formData.licenseNumber,
+      specialization: formData.specialization,
+      experience: formData.experience,
+      location: formData.location,
+      bio: formData.bio,
+      ageRange: formData.ageRange
+    };
 
-    try {
-      setIsLoading(true);
-      setError("");
-
-      // Prepare data for backend
-      const userData = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        password: formData.password,
-        role: accountType,
-        ageRange: formData.ageRange,
-        location: formData.location,
-      };
-
-      // Add counsellor-specific fields if applicable
-      if (accountType === "Counsellor") {
-        userData.licenseNumber = formData.licenseNumber;
-        userData.specialization = formData.specialization;
-        userData.experience = formData.experience;
-        userData.bio = formData.bio;
+      const endpoint = accountType === "Client" ? "/api/client-register" : "/api/counsellor-register";
+      const response = await axios.post(`http://localhost:5000${endpoint}`, userData);
+      if (response.status === 201 || response.status === 200) {
+        // Registration successful
+        console.log('User registered successfully:', response.data);
+        navigator('/signin');
       }
-
-      await registerUser(userData);
-      // Redirect to home page after successful registration
-
-      if (accountType === "Client") {
-        navigate("/client-dashboard");
-      }
-
-      if (accountType === "Counsellor") {
-        navigate("/counsellor-dashboard");
-      }
-    } catch (error) {
-      setError(error.message || "Registration failed. Please try again.");
-    } finally {
-      setIsLoading(false);
+    }catch(error){
+      console.error('Error during registration:', error );  
     }
   };
+  
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-green-50">
@@ -161,6 +103,7 @@ const Signup = () => {
           >
             Client
           </button>
+
           <button
             onClick={() => setAccountType("Counsellor")}
             className={`w-1/2 py-2 text-sm font-medium border rounded-md ${
@@ -204,7 +147,7 @@ const Signup = () => {
             />
           </div>
 
-          {/* Password Fields */}
+          {/* Password */}
           {accountType === "Counsellor" ? (
             <div className="flex flex-col space-y-1">
               <div className="flex space-x-3">
@@ -253,26 +196,24 @@ const Signup = () => {
             </div>
           )}
 
-          {/* Counsellor extra fields */}
+          {/* Counsellor Extra Fields */}
           {accountType === "Counsellor" && (
             <>
-              <div>
-                <input
-                  type="text"
-                  name="licenseNumber"
-                  value={formData.licenseNumber}
-                  onChange={handleChange}
-                  placeholder="Professional license number"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                />
-              </div>
+              <input
+                type="text"
+                name="licenseNumber"
+                value={formData.licenseNumber}
+                onChange={handleChange}
+                placeholder="Professional license number"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              />
 
               <div className="flex space-x-3">
                 <select
                   name="specialization"
                   value={formData.specialization}
                   onChange={handleChange}
-                  className="w-1/2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 text-gray-500"
+                  className="w-1/2 px-3 py-2 border border-gray-300 rounded-md text-gray-500"
                 >
                   <option>Select specialization</option>
                   <option>Psychologist</option>
@@ -280,11 +221,12 @@ const Signup = () => {
                   <option>Counsellor</option>
                   <option>Psychiatrist</option>
                 </select>
+
                 <select
                   name="experience"
                   value={formData.experience}
                   onChange={handleChange}
-                  className="w-1/2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 text-gray-500"
+                  className="w-1/2 px-3 py-2 border border-gray-300 rounded-md text-gray-500"
                 >
                   <option>Select experience</option>
                   <option>0-2 years</option>
@@ -294,38 +236,34 @@ const Signup = () => {
                 </select>
               </div>
 
-              <div>
-                <input
-                  type="text"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleChange}
-                  placeholder="City, State"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                />
-              </div>
+              <input
+                type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                placeholder="City, State"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              />
 
-              <div>
-                <textarea
-                  name="bio"
-                  value={formData.bio}
-                  onChange={handleChange}
-                  placeholder="Tell clients about your approach and experience..."
-                  rows="3"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                ></textarea>
-              </div>
+              <textarea
+                name="bio"
+                value={formData.bio}
+                onChange={handleChange}
+                placeholder="Tell clients about your approach and experience..."
+                rows="3"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+              ></textarea>
             </>
           )}
 
-          {/* Client-only fields */}
+          {/* Client Fields */}
           {accountType === "Client" && (
             <div className="flex space-x-3">
               <select
                 name="ageRange"
                 value={formData.ageRange}
                 onChange={handleChange}
-                className="w-1/2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 text-gray-500"
+                className="w-1/2 px-3 py-2 border border-gray-300 text-gray-500"
               >
                 <option>Select age range</option>
                 <option>18-25</option>
@@ -333,34 +271,27 @@ const Signup = () => {
                 <option>36-50</option>
                 <option>50+</option>
               </select>
+
               <input
                 type="text"
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
                 placeholder="City, State"
-                className="w-1/2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="w-1/2 px-3 py-2 border border-gray-300 rounded-md"
               />
             </div>
           )}
 
           <button
             type="submit"
-            disabled={isLoading}
-            className="w-full py-2 bg-gray-900 text-white font-medium rounded-md hover:bg-gray-800 transition disabled:opacity-70"
-            onClick={() => {accountType === "Client" ? navigate("/client-dashboard") : navigate("/counsellor-dashboard")}}
+            className="w-full py-2 bg-gray-900 text-white font-medium rounded-md hover:bg-gray-800 transition"
           >
-            {isLoading
-              ? "Creating Account..."
-              : accountType === "Client"
+            {accountType === "Client"
               ? "Create Client Account"
               : "Create Counsellor Account"}
           </button>
         </form>
-
-        {error && (
-          <p className="text-red-500 text-sm mt-2 text-center">{error}</p>
-        )}
 
         <p className="text-sm text-gray-600 mt-6 text-center">
           Already have an account?{" "}
@@ -372,5 +303,6 @@ const Signup = () => {
     </div>
   );
 };
+
 
 export default Signup;
