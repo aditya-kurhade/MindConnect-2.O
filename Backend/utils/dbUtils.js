@@ -16,22 +16,21 @@ const createTable = async () => {
         console.log('client table ensured to exist.'); 
 
         await pool.query(
-           `CREATE TABLE IF NOT EXISTS counsellors (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-             firstName VARCHAR(100),
+            `CREATE TABLE IF NOT EXISTS counsellors (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                firstName VARCHAR(100),
                 lastName VARCHAR(100),
-            email VARCHAR(150) UNIQUE,
-            password VARCHAR(255),
+                email VARCHAR(150) UNIQUE,
+                password VARCHAR(255),
                 confirmPassword VARCHAR(255),
-            licenseNumber VARCHAR(100),
-            specialization VARCHAR(150),
-            experience INT,
-            location VARCHAR(150),
-            bio TEXT
-                    );`
-
+                licenseNumber VARCHAR(100),
+                specialization VARCHAR(150),
+                experience VARCHAR(50),
+                location VARCHAR(150),
+                bio TEXT
+            );`
         );
-        console.log('Coounsellor table ensured');
+        console.log('Counsellor table ensured');
         
         
     } catch (error) {
