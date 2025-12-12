@@ -1,27 +1,25 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require('express');
+const {checkConnection} = require('./config/dbConfig');
+const {createTable} = require('./utils/dbUtils');
+
 const app = express();
-const { checkConnection } = require('./config/db');
-const { createTable } = require('./utils/dbUtils');
-
-app.use(express.json());
-
-// Sample route
+const port = process.env.PORT || 3000;
+    
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+  res.send('Hello World!');
 });
 
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, async () => {
-    console.log(`Server is running on port ${PORT}`);
-    console.log(`Access the server at http://localhost:${PORT}`);
-    try{
-        await checkConnection();
-        await createTable();
+app.listen(port, () => {
+    try {
+        checkConnection();
+        createTable();
+        console.log(`Server is running on port ${port}`);
+    } catch (error) {
+        console.error('Failed to start server:', error);
     }
-    catch(err){
-        console.error("Error checking database connection:", err);
-    }
-});
+    
+}); 
 
 module.exports = app;

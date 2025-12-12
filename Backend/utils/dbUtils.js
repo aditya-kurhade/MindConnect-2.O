@@ -1,42 +1,42 @@
-const { pool } = require('../config/db');
+const {pool} = require('../config/dbConfig');
 
-const createTable = async() => {
-    try{
+const createTable = async () => {
+    try {
+        await pool.query(`
+        CREATE TABLE IF NOT EXISTS clients (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        firstName VARCHAR(50),
+        lastName VARCHAR(50),
+        email VARCHAR(100) UNIQUE,
+        password VARCHAR(255),
+        age INT,
+        location VARCHAR(100)
+            );
+        `);
+        console.log('client table ensured to exist.'); 
+
         await pool.query(
-            `CREATE TABLE IF NOT EXISTS clients (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                firstname VARCHAR(255) NOT NULL,
-                lastname VARCHAR(255) NOT NULL,
-                email VARCHAR(255) NOT NULL UNIQUE,
-                password VARCHAR(255) NOT NULL,
-                age INT,
-                city VARCHAR(255),
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )`
-        )
-        console.log("Clients table created or already exists.");
+           `CREATE TABLE IF NOT EXISTS counsellors (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+             firstName VARCHAR(100),
+                lastName VARCHAR(100),
+            email VARCHAR(150) UNIQUE,
+            password VARCHAR(255),
+                confirmPassword VARCHAR(255),
+            licenseNumber VARCHAR(100),
+            specialization VARCHAR(150),
+            experience INT,
+            location VARCHAR(150),
+            bio TEXT
+                    );`
 
-        await pool.query(
-            `CREATE TABLE IF NOT EXISTS counsellors (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                firstname VARCHAR(255) NOT NULL,
-                lastname VARCHAR(255) NOT NULL,
-                email VARCHAR(255) NOT NULL UNIQUE, 
-                password VARCHAR(255) NOT NULL,
-                license_number VARCHAR(255) NOT NULL UNIQUE,
-                specialization VARCHAR(255),
-                experience_years INT,
-                city VARCHAR(255),
-                description TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )`
-        )
-        console.log("counsellors table created or already exists.");
-
-    }catch(err){
-        console.error("Error creating clients table:", err);
+        );
+        console.log('Coounsellor table ensured');
+        
+        
+    } catch (error) {
+        console.error('Error creating users table:', error);
     }
-
 }
 
-module.exports = { createTable };
+module.exports = {createTable}
