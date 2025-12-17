@@ -7,6 +7,7 @@ const cors = require('cors');
 
 const authClientRoute = require('./routes/authClientRoute');
 const authCounsellorRoute = require('./routes/authCounsellorRoute');
+const dashboardRoute = require('./routes/dashboardRoute');
 
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(cors());
 
 app.use('/api', authClientRoute);
 app.use('/api', authCounsellorRoute);
+app.use('/api', dashboardRoute);
 
 
 

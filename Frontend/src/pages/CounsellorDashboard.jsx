@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaUsers, FaHeart, FaCalendarAlt, FaFileAlt } from "react-icons/fa";
 import StatsCard from "../components/counsellorComponents/StatsCard";
 import RecentClientActivity from "../components/counsellorComponents/RecentClientActivity";
@@ -10,8 +10,25 @@ import Modal from "../components/counsellorComponents/Modal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NavbarCounsellor from "../components/counsellorComponents/NavbarCounsellor";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+
 
 const Dashboard = () => {
+  const Navigate = useNavigate();
+const [userdata, setUserdata ] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    licenseNumber: "",
+    specialization: "",
+    experience: "",
+    location: "",
+    bio: ""
+  });
+
+  // Tabs
   const [activeTab, setActiveTab] = useState("overview");
   const [search, setSearch] = useState("");
 
@@ -38,6 +55,42 @@ const Dashboard = () => {
   const [appointmentSession, setAppointmentSession] = useState("");
   const [appointmentDuration, setAppointmentDuration] = useState("");
   const [appointmentTime, setAppointmentTime] = useState("");
+
+  useEffect(() => {
+    // Fetch initial data (clients and schedule) - placeholder for actual API calls
+    const token = Cookies.get("token");
+    if(!token) {
+      console.log("No authentication token found. Please log in.");
+      Navigate("/signin");
+      return;
+    }
+    const fetchDashboard = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/counsellor-dashboard", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = response.data;
+        setUserdata({
+            firstName: data.counsellor.firstName,
+            lastName: data.counsellor.lastName,
+            email: data.counsellor.email,
+            licenseNumber: data.counsellor.licenseNumber,
+            specialization: data.counsellor.specialization,
+            experience: data.counsellor.experience,
+            location: data.counsellor.location,
+            bio: data.counsellor.bio
+        });
+        console.log("Dashboard data:", response.data);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+        Navigate("/signin");
+      }
+      
+    };
+    fetchDashboard();
+  }, [Navigate]);
 
   // Stats
   const stats = [
@@ -198,7 +251,7 @@ const Dashboard = () => {
 
   return (
     <>
-    <NavbarCounsellor />
+    <NavbarCounsellor userdata={userdata} />
     <div className="space-y-6 p-6 ml-35 mr-35">
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

@@ -2,7 +2,8 @@ import React from "react";
 import { FaRegHeart, FaBell, FaCog, FaUserCircle, FaSignOutAlt  } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-const NavbarCounsellor = () => {
+const NavbarCounsellor = (props) => {
+  const userdata = props.userdata;
   return (
     <div>
       <header className="flex justify-between items-center px-36 py-3 bg-white shadow-sm">
@@ -10,7 +11,7 @@ const NavbarCounsellor = () => {
           <FaRegHeart className="text-blue-500 text-3xl" />
           <div>
         <h1 className="text-2xl font-bold">Counsellor Dashboard</h1>
-        <p className="text-sm text-gray-500">Welcome back, Dr. Smith</p>
+        <p className="text-sm text-gray-500">Welcome back, Dr. {userdata.firstName} {userdata.lastName}</p>
       </div>
         </div>
         <div className="space-x-6 flex items-center ">

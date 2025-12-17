@@ -18,7 +18,7 @@ const Signup = () => {
     experience: "",
     location: "",
     bio: "",
-    ageRange: "",
+    age: "",
   });
 
   const [passwordError, setPasswordError] = useState("");
@@ -47,7 +47,7 @@ const Signup = () => {
       experience: formData.experience,
       location: formData.location,
       bio: formData.bio,
-      ageRange: formData.ageRange
+      age: formData.age
     };
 
       const endpoint = accountType === "Client" ? "/api/client-register" : "/api/counsellor-register";
@@ -259,18 +259,16 @@ const Signup = () => {
           {/* Client Fields */}
           {accountType === "Client" && (
             <div className="flex space-x-3">
-              <select
-                name="ageRange"
-                value={formData.ageRange}
+              <input
+                type="number"
+                name="age"
+                value={formData.age}
                 onChange={handleChange}
-                className="w-1/2 px-3 py-2 border border-gray-300 text-gray-500"
-              >
-                <option>Select age range</option>
-                <option>18-25</option>
-                <option>26-35</option>
-                <option>36-50</option>
-                <option>50+</option>
-              </select>
+                placeholder="Age"
+                className="w-1/2 px-3 py-2 border border-gray-300 rounded-md"
+                min="1"
+                max="120"
+              />
 
               <input
                 type="text"

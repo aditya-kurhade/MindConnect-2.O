@@ -1,5 +1,7 @@
 const {pool} = require('../config/dbConfig');
 const bcrypt = require('bcrypt');
+const  jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const counsellorRegister = async (req, res) => {
     try {
@@ -33,8 +35,13 @@ const counsellorLogin = async (req, res) => {
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(400).json({ message: 'Invalid username or password' });
-        }   
-        return res.status(200).json({ message: 'Login successful', userId: user.id });
+        } else{
+            const token = jwt.sign(
+                { userId: user.id, firstName: user.firstName }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+            return res.status(200).json({ message: 'Login successful', userId: user.id, token });
+        } 
+        
     } catch (error) {
         console.error('Error in counsellorLogin:', error);
         return res.status(400).json({ message: 'Internal server error' });

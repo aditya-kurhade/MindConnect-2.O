@@ -7,6 +7,7 @@ import {
 } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const Signin = () => {
   const [accountType, setAccountType] = useState("Client");
@@ -43,7 +44,10 @@ const Signin = () => {
       const response = await axios.post(`http://localhost:5000${endpoint}`, formData);
 
       if (response.status === 200) {
-        console.log("Login successful:", response.data);
+        console.log("Login successful:",);
+        Cookies.set("token", response.data.token);
+        
+
         // Redirect based on account type
         if (accountType === "Client") {
           navigate("/client-dashboard");
