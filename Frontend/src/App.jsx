@@ -10,6 +10,8 @@ import AskQuestion from "./pages/AskQuestion";
 import QuestionDetail from "./pages/QuestionDetail";
 import Resources from "./pages/Resources";
 import ResourceDetail from "./pages/ResourceDetail";
+import ReportAI from "./pages/ReportAI";
+import AiChatbot from "./pages/AiChatbot";
 
 
 function App() {
@@ -39,6 +41,11 @@ function App() {
               path="/counsellor-dashboard"
               element={<CounsellorDashboard />}
             />
+          
+            <Route exact path="/ai-report" element={<ReportAI />} />
+            <Route exact path="/ai-chatbot" element={<AiChatbot />} />
+        
+              
           </Routes>
         </Router>
 
