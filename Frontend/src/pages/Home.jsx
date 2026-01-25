@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import AIInsightCard from "../components/AICard";
+import ChatbotCard from "../components/ChatbotCard";
 import {
   FaRegHeart,
   FaUserFriends,
@@ -109,6 +111,11 @@ export default function Home() {
             </button>
           </Link>
         </div>
+
+        <div className="text-left mt-16"> <AIInsightCard /></div>
+
+        {/* ChatBot Session Insight Generator */}
+        <div className="text-left mt-16"><ChatbotCard /></div>
 
         {/* Forum CTA */}
         <div className="mt-16 bg-gradient-to-r from-purple-50 to-blue-50 p-8 rounded-2xl max-w-4xl mx-auto">
