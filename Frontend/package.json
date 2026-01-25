@@ -15,7 +15,6 @@
     "@tailwindcss/vite": "^4.1.13",
     "appwrite": "^19.0.0",
     "axios": "^1.13.2",
-    "axois": "^0.0.1-security",
     "framer-motion": "^12.23.12",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.542.0",

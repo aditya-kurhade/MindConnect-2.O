@@ -20,30 +20,27 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route exact path="/signin" element={<Signin />} />
-            <Route exact path="/signup" element={<Signup />} />
-            <Route exact path="/forum" element={<Forum />} />
-            <Route exact path="/forum/ask" element={<AskQuestion />} />
+            <Route path="/signin" element={<Signin />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/forum" element={<Forum />} />
+            <Route path="/forum/ask" element={<AskQuestion />} />
             <Route
-              exact
               path="/forum/question/:id"
               element={<QuestionDetail />}
             />
-            <Route exact path="/resources" element={<Resources />} />
-            <Route exact path="/resources/:id" element={<ResourceDetail />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/resources/:id" element={<ResourceDetail />} />
             <Route
-              exact
               path="/client-dashboard"
               element={<ClientDashboard />}
             />
             <Route
-              exact
               path="/counsellor-dashboard"
               element={<CounsellorDashboard />}
             />
           
-            <Route exact path="/ai-report" element={<ReportAI />} />
-            <Route exact path="/ai-chatbot" element={<AiChatbot />} />
+            <Route path="/ai-report" element={<ReportAI />} />
+            <Route path="/ai-chatbot" element={<AiChatbot />} />
         
               
           </Routes>
