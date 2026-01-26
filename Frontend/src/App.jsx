@@ -12,6 +12,7 @@ import Resources from "./pages/Resources";
 import ResourceDetail from "./pages/ResourceDetail";
 import ReportAI from "./pages/ReportAI";
 import AiChatbot from "./pages/AiChatbot";
+import RAGChatbot from "./pages/RAGChatbot ";
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
           
             <Route path="/ai-report" element={<ReportAI />} />
             <Route path="/ai-chatbot" element={<AiChatbot />} />
+            <Route path="/rag-chatbot" element={<RAGChatbot />} />
         
               
           </Routes>
