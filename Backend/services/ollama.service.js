@@ -11,7 +11,7 @@ const generateAIResponse = async (prompt) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'llama3:8b', // <- use your installed model
+        model: 'llama3:8b', 
         prompt,
         stream: false,
       }),

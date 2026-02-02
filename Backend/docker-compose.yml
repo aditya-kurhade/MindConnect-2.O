@@ -10,5 +10,14 @@ services:
       - valkey-data:/data
     command: valkey-server --appendonly yes
 
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: mindconnect-qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant-data:/qdrant/storage
+
 volumes:
   valkey-data:
+  qdrant-data:

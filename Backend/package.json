@@ -10,12 +10,13 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:worker": "nodemon workers/myWorker.js"
+    "worker": "node workers/myWorker.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@langchain/community": "^1.1.7",
     "@langchain/core": "^1.1.17",
+    "@langchain/ollama": "^1.2.1",
     "@langchain/openai": "^1.2.3",
     "@langchain/qdrant": "^1.0.1",
     "@langchain/textsplitters": "^1.0.1",

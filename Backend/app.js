@@ -11,7 +11,7 @@ const authCounsellorRoute = require('./routes/authCounsellorRoute');
 const dashboardRoute = require('./routes/dashboardRoute');
 const aiChatbotRoute = require('./routes/aiChatbotRoute');
 const pdfUploadRoute = require('./routes/pdfUploadRoute');
-
+const ragChatbotRoute = require('./routes/RagChatbotRoute');
 
 
 const app = express();
@@ -27,6 +27,7 @@ app.use('/api', authCounsellorRoute);
 app.use('/api', dashboardRoute);
 app.use('/api', aiChatbotRoute);
 app.use('/api', pdfUploadRoute);
+app.use('/api', ragChatbotRoute); 
 
 //rag code 
 

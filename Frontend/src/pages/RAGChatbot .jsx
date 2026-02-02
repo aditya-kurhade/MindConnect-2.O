@@ -14,11 +14,11 @@ const RAGChatbot = () => {
     setMessage("");
 
     try {
-      const response = await axios.post("/api/rag-chat/ask", { question: message });
+      const response = await axios.post("/api/rag-chat", { query: message });
       if (response.data.success) {
         setChat((prevChat) => [
           ...prevChat,
-          { role: "ai", text: response.data.answer, sources: response.data.sources },
+          { role: "ai", text: response.data.data, sources: response.data.sources },
         ]);
       } else {
         setChat((prevChat) => [
@@ -40,7 +40,9 @@ const RAGChatbot = () => {
   if (!file) return alert("Select a PDF first");
 
   const formData = new FormData();
+  formData.append("query", message);
   formData.append("pdf", file);
+  console.log("Uploading file:", formData);
 
   try {
     const response = await axios.post("/api/upload/pdf", formData, {
