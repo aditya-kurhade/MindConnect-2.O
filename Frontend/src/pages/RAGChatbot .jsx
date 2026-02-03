@@ -14,7 +14,7 @@ const RAGChatbot = () => {
     setMessage("");
 
     try {
-      const response = await axios.post("/api/rag-chat", { query: message });
+      const response = await axios.post("http://localhost:5000/api/rag-chat", { query: message });
       if (response.data.success) {
         setChat((prevChat) => [
           ...prevChat,
@@ -45,7 +45,7 @@ const RAGChatbot = () => {
   console.log("Uploading file:", formData);
 
   try {
-    const response = await axios.post("/api/upload/pdf", formData, {
+    const response = await axios.post("http://localhost:5000/api/upload-pdf", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
