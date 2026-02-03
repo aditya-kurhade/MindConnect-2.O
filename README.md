@@ -45,52 +45,63 @@ Mental health support is often inaccessible due to cost, availability, and stigm
 ### Frontend Stack
 | Technology | Version | Purpose |
 |-----------|---------|---------|
-| **React** | 19.1.1 | UI framework and component library |
-| **Vite** | 5.x | Fast build tool and dev server |
-| **React Router** | 7.8.2 | Client-side routing |
-| **Tailwind CSS** | 4.1.13 | Utility-first CSS framework |
-| **Framer Motion** | 12.23.12 | Animations and transitions |
-| **Axios** | 1.13.2 | HTTP client for API calls |
-| **React Toastify** | 11.0.5 | Toast notifications |
-| **Lucide React** | 0.542.0 | Icon library |
+| **React** | ^19.1.1 | UI framework and component library |
+| **Vite** | ^7.1.2 | Fast build tool and dev server |
+| **React Router** | ^7.8.2 | Client-side routing |
+| **Tailwind CSS** | ^4.1.13 | Utility-first CSS framework |
+| **Framer Motion** | ^12.23.12 | Animations and transitions |
+| **Axios** | ^1.13.2 | HTTP client for API calls |
+| **React Toastify** | ^11.0.5 | Toast notifications |
+| **Lucide React** | ^0.542.0 | Icon library |
+| **React Icons** | ^5.5.0 | Additional icon library |
+| **JS Cookie** | ^3.0.5 | Cookie management |
+| **UUID** | ^12.0.0 | Unique identifier generation |
 
 ### Backend Stack
 | Technology | Version | Purpose |
 |-----------|---------|---------|
-| **Node.js** | 24.11.1 | Runtime environment |
-| **Express** | 5.2.1 | Web framework |
-| **MySQL** | via mysql2 | Primary relational database |
-| **Redis (Valkey)** | Latest | Caching and message queue |
+| **Node.js** | 24.11.1+ | Runtime environment |
+| **Express** | ^5.2.1 | Web framework |
+| **MySQL2** | ^3.15.3 | MySQL database driver |
+| **IORedis** | ^5.9.2 | Redis client for caching and queues |
 | **Qdrant** | Latest | Vector database for embeddings |
-| **Bull MQ** | 5.67.1 | Job queue for async processing |
+| **BullMQ** | ^5.67.1 | Job queue for async processing |
 | **Ollama** | Local | Local LLM and embedding model |
+| **bcrypt** | ^6.0.0 | Password hashing |
+| **jsonwebtoken** | ^9.0.3 | JWT authentication |
+| **Multer** | ^2.0.2 | File upload middleware |
+| **dotenv** | ^17.2.3 | Environment variable management |
 
 ### AI & NLP Technologies
-| Library | Purpose |
-|---------|---------|
-| **@langchain/ollama** | Local embedding generation |
-| **@langchain/qdrant** | Vector store integration |
-| **@langchain/community** | Document loaders and utilities |
-| **@langchain/textsplitters** | Document chunking for RAG |
-| **@google/generative-ai** | Gemini AI integration (backup) |
+| Library | Version | Purpose |
+|---------|---------|---------|
+| **@langchain/ollama** | ^1.2.1 | Local embedding generation |
+| **@langchain/qdrant** | ^1.0.1 | Vector store integration |
+| **@langchain/community** | ^1.1.7 | Document loaders and utilities |
+| **@langchain/textsplitters** | ^1.0.1 | Document chunking for RAG |
+| **@langchain/core** | ^1.1.17 | Core LangChain abstractions |
+| **@langchain/openai** | ^1.2.3 | OpenAI integration (optional) |
+| **@google/generative-ai** | ^0.24.1 | Gemini AI integration (optional) |
+| **pdf-parse** | ^1.1.4 | PDF text extraction |
 
 ### DevOps & Infrastructure
-| Tool | Purpose |
-|------|---------|
-| **Docker & Docker Compose** | Containerization |
-| **Nodemon** | Development server auto-reload |
-| **ESLint** | Code quality and linting |
+| Tool | Version | Purpose |
+|------|---------|---------|---|
+| **Docker & Docker Compose** | Latest | Containerization |
+| **Nodemon** | ^3.1.11 | Development server auto-reload |
+| **ESLint** | ^9.33.0 | Code quality and linting |
+| **Vite Plugin React SWC** | ^4.0.0 | Fast React refresh with SWC |
 
 ---
 
 ## Installation & Setup
 
 ### Prerequisites
-- **Node.js** (v24.11.1 or higher)
-- **npm** (v10+)
+- **Node.js** (v18.x or higher, v24.11.1 recommended)
+- **npm** (v9+ or higher)
 - **Docker** and **Docker Compose**
 - **Ollama** (for local LLM and embeddings)
-- **MySQL** (or MySQL-compatible database)
+- **MySQL** (v8.0 or higher)
 
 ### Step 1: Clone Repository
 ```bash
@@ -366,8 +377,9 @@ MindConnect-2.O/
 
 **Technical Details**:
 - **Splitter Config**: 500 char chunks, 50 char overlap
-- **Embedding Model**: nomic-embed-text (384 dimensions)
+- **Embedding Model**: nomic-embed-text (768 dimensions)
 - **Collection**: "pdf-docs" in Qdrant
+- **Vector Distance**: Cosine similarity
 
 ### 9. **Report & Analytics**
 - **AI-Generated Reports**: Insights from AI interactions
@@ -678,14 +690,14 @@ CREATE TABLE forum_answers (
 ```json
 {
   "vectors": {
-    "size": 384,
+    "size": 768,
     "distance": "Cosine"
   },
   "payload": {
     "text": "string",
     "source": "string",
-    "page": "integer",
-    "chunk_index": "integer"
+    "metadata": "object",
+    "loc": "object"
   }
 }
 ```
@@ -894,7 +906,7 @@ app.use(cors({
 
 ## Future Features & Roadmap
 
-### Planned Features (Q1-Q2 2026)
+### Planned Features (Q2-Q3 2026)
 - [ ] **Video Consultation**: WebRTC integration for video calls
 - [ ] **Mobile App**: React Native mobile application
 - [ ] **Advanced Analytics**: ML-based progress tracking
@@ -948,6 +960,6 @@ For issues, questions, or suggestions:
 
 ---
 
-**Last Updated**: January 28, 2026  
+**Last Updated**: February 2, 2026  
 **Version**: 2.0.0  
 **Status**: Active Development

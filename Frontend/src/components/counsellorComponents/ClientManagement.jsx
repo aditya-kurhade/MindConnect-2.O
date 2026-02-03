@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { FaEye, FaSearch } from "react-icons/fa";
+import { motion } from "framer-motion";
+import { FiSearch, FiPlus, FiEdit2, FiTrash2, FiExternalLink, FiUsers, FiPhone, FiMail } from "react-icons/fi";
 
 const ClientManagement = ({ clients, onAddClient, onEditClient, onDeleteClient }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Filter clients by name, issue, phone, or email
   const filteredClients = clients.filter(
     (c) =>
       c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -14,86 +14,117 @@ const ClientManagement = ({ clients, onAddClient, onEditClient, onDeleteClient }
   );
 
   return (
-    <div className="p-6 bg-white shadow rounded-xl space-y-4">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6"
+    >
       {/* Header */}
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold">Clients</h3>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
+            <FiUsers className="text-white text-lg" />
+          </div>
+          <h3 className="text-xl font-bold text-gray-900">Client Management</h3>
+        </div>
         <button
           onClick={onAddClient}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-md hover:shadow-lg"
         >
-          + Add Client
+          <FiPlus size={18} />
+          Add Client
         </button>
       </div>
 
       {/* Search Bar */}
-      <div className="relative mb-4">
+      <div className="relative mb-6">
+        <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
         <input
           type="text"
-          placeholder="Search clients..."
+          placeholder="Search clients by name, issue, phone or email..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
         />
-        <FaSearch className="absolute left-3 top-3 text-gray-400" />
       </div>
 
       {/* Client List */}
       {filteredClients.length === 0 ? (
-        <p className="text-gray-500 text-center py-6">No clients found</p>
+        <div className="text-center py-12">
+          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
+            <FiUsers className="text-gray-400 text-2xl" />
+          </div>
+          <p className="text-gray-500 font-medium">No clients found</p>
+          <p className="text-gray-400 text-sm mt-1">Try adjusting your search or add a new client</p>
+        </div>
       ) : (
         <ul className="space-y-3">
           {filteredClients.map((c, idx) => (
-            <li
+            <motion.li
               key={c.id}
-              className="p-4 border rounded-xl flex justify-between items-center"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: idx * 0.05 }}
+              className="p-4 bg-gradient-to-r from-gray-50 to-white rounded-xl border border-gray-100 hover:shadow-md hover:border-blue-100 transition-all duration-300 group"
             >
-              <div>
-                <h4 className="font-medium text-lg">{c.name}</h4>
-                <p className="text-sm text-gray-500">{c.issue}</p>
-                <p className="text-sm text-gray-500">
-                  📞 {c.phone} | ✉️ {c.email}
-                </p>
-                <p className="text-xs text-gray-400">Last session: {c.last}</p>
-              </div>
-              <div className="flex flex-col items-end space-y-2">
-                <span
-                  className={`text-xs px-3 py-1 rounded-full ${
-                    c.status === "active"
-                      ? "bg-green-600 text-white"
-                      : c.status === "scheduled"
-                      ? "bg-blue-100 text-blue-600"
-                      : "bg-gray-200 text-gray-600"
-                  }`}
-                >
-                  {c.status}
-                </span>
-                <div className="flex space-x-2">
+              <div className="flex flex-col sm:flex-row justify-between gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h4 className="font-semibold text-gray-900 text-lg">{c.name}</h4>
+                    <span
+                      className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                        c.status === "active"
+                          ? "bg-green-100 text-green-700"
+                          : c.status === "scheduled"
+                          ? "bg-blue-100 text-blue-700"
+                          : "bg-gray-100 text-gray-600"
+                      }`}
+                    >
+                      {c.status}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-2">{c.issue}</p>
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                    <span className="inline-flex items-center gap-1">
+                      <FiPhone className="text-blue-500" size={14} />
+                      {c.phone}
+                    </span>
+                    <span className="inline-flex items-center gap-1">
+                      <FiMail className="text-purple-500" size={14} />
+                      {c.email}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-2">Last session: {c.last}</p>
+                </div>
+                <div className="flex sm:flex-col items-center gap-2">
                   <button
-                    className="px-2 py-1 text-white bg-yellow-500 rounded hover:bg-yellow-600 text-xs"
+                    className="w-9 h-9 bg-amber-500 text-white rounded-lg flex items-center justify-center hover:bg-amber-600 transition-colors"
                     onClick={() => onEditClient(idx)}
+                    title="Edit"
                   >
-                    Edit
+                    <FiEdit2 size={16} />
                   </button>
                   <button
-                    className="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-600 text-xs"
+                    className="w-9 h-9 bg-red-500 text-white rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors"
                     onClick={() => onDeleteClient(idx)}
+                    title="Delete"
                   >
-                    Delete
+                    <FiTrash2 size={16} />
                   </button>
                   <button
-                    className="px-2 py-1 text-white bg-blue-600 rounded hover:bg-blue-700 text-xs flex items-center gap-1"
+                    className="w-9 h-9 bg-blue-500 text-white rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors"
                     onClick={() => window.open(`/client/${c.id}`, "_blank")}
+                    title="View"
                   >
-                    <FaEye /> View
+                    <FiExternalLink size={16} />
                   </button>
                 </div>
               </div>
-            </li>
+            </motion.li>
           ))}
         </ul>
       )}
-    </div>
+    </motion.div>
   );
 };
 
